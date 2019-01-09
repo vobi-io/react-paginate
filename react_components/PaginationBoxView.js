@@ -184,28 +184,31 @@ export default class PaginationBoxView extends Component {
 
     const { selected } = this.state;
 
-    if (pageCount <= pageRangeDisplayed) {
+    const totalPages = 2*Math.floor(pageRangeDisplayed/2) + 2*marginPagesDisplayed + 2 + 1
+    if (pageCount <= totalPages) {
 
       for (let index = 0; index < pageCount; index++) {
         items.push(this.getPageElement(index));
       }
 
     } else {
-
       let leftSide  = (pageRangeDisplayed / 2);
       let rightSide = (pageRangeDisplayed - leftSide);
+      leftSide = Math.floor(leftSide)
+      rightSide = Math.floor(rightSide)
 
+      // if(selected < marginPagesDisplayed)
       // If the selected page index is on the default right side of the pagination,
       // we consider that the new right side is made up of it (= only one break element).
       // If the selected page index is on the default left side of the pagination,
       // we consider that the new left side is made up of it (= only one break element).
-      if (selected > pageCount - pageRangeDisplayed / 2) {
-        rightSide = pageCount - selected;
-        leftSide  = pageRangeDisplayed - rightSide;
+      if (selected >= pageCount - marginPagesDisplayed - rightSide - 2) {
+        rightSide = pageCount - selected - 1;
+        leftSide  = totalPages - marginPagesDisplayed - rightSide - 2;
       }
-      else if (selected < pageRangeDisplayed / 2) {
+      else if (selected <= marginPagesDisplayed + 1 + leftSide) {
         leftSide  = selected;
-        rightSide = pageRangeDisplayed - leftSide;
+        rightSide = totalPages - marginPagesDisplayed - leftSide - 2;
       }
 
       let index;
